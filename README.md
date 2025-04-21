@@ -11,5 +11,4 @@ FFMPEG is a powerful command-line tool for processing audio and video files. Des
 ## Literature and tools 
 - Install FFMPEG - https://www.youtube.com/watch?v=mfTaTmc7Wjo
 - FFMPEG documentation - https://ffmpeg.org/documentation.html
-- tkinter documentation for GUI - https://docs.python.org/3/library/tkinter.html
-- PyQt5 tutorial for GUI - https://www.pythonguis.com/pyqt5-tutorial/
+- customtkinter documentation for GUI - https://customtkinter.tomschimansky.com/
