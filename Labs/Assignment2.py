@@ -130,5 +130,5 @@ removing_audio(short_version, video_without_audio)
 output_folder = "Photos"
 extract_images_every_n_seconds(short_version, output_folder, interval=1)
 
-video_from_images = "short_video_from_images.mkv"
+video_from_images = "Videos/Individual/short_video_from_images.mkv"
 create_video_from_images(output_folder, video_from_images)
