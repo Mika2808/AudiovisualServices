@@ -71,8 +71,7 @@ def removing_audio(input, output):
     subprocess.run(cmd)
 
 # Function for creating video from images
-def create_video_from_images(photo_dir, output_file):
-    
+def create_video_from_images(photo_dir, output_file):   
     cmd = [
         "ffmpeg",
         "-framerate", "1",
