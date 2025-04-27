@@ -163,6 +163,27 @@ class App(customtkinter.CTk):
         print("checkbox_frame", self.scrollable_checkbox_frame.get())
         #print("radiobutton_frame", self.radiobutton_frame.get(), "\n")
 
+
+class ExampleApp(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Option Menu Example")
+        self.geometry("400x200")
+
+        self.option_menu = customtkinter.CTkOptionMenu(
+            self,
+            values=["Option 1", "Option 2", "Option 3"],
+            command=self.option_changed  # callback when selected
+        )
+        self.option_menu.pack(pady=20)
+
+        self.label = customtkinter.CTkLabel(self, text="Choose something...")
+        self.label.pack(pady=10)
+
+    def option_changed(self, selected_option):
+        print(f"Selected: {selected_option}")
+        self.label.configure(text=f"You chose: {selected_option}")
+
 app = App()
 app.mainloop()
 

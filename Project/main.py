@@ -8,7 +8,7 @@ class App(customtkinter.CTk):
         # main parameters
         self.title("Name Surname")
         self.geometry("1000x800")
-        customtkinter.set_widget_scaling(1.5)  # widget dimensions and text size
+        customtkinter.set_widget_scaling(1.3)  # widget dimensions and text size
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -61,22 +61,34 @@ class MainFrame(customtkinter.CTkFrame):
                         }
 
         for i, option in enumerate(self.options):
-            self.button = customtkinter.CTkButton(
+            if option == "Exit":
+                self.button = customtkinter.CTkButton(
                 self,
                 text=option,
                 command=lambda option=option: self.choose_option(option),
                 fg_color="transparent",
-                hover_color="#357ABD",
+                hover_color="red",
                 corner_radius=10,
                 font=("Arial", 18)
-            )
-            self.button.grid(row=i+2, column=0, padx=20, pady=15, sticky="ew", columnspan=2)
+                )
+                self.button.grid(row=i+2, column=0, padx=20, pady=15, sticky="ew", columnspan=2)
+            else:
+                self.button = customtkinter.CTkButton(
+                    self,
+                    text=option,
+                    command=lambda option=option: self.choose_option(option),
+                    fg_color="transparent",
+                    hover_color="#357ABD",
+                    corner_radius=10,
+                    font=("Arial", 18)
+                )
+                self.button.grid(row=i+2, column=0, padx=20, pady=15, sticky="ew", columnspan=2)
         
     def choose_option(self, option):
         print("Button clicked:", option) # info about clicked button
         
         # changing frame or exiting
-        if option is "Exit":
+        if option == "Exit":
             self.master.exit()  
         else:
             self.master.show_frame(self.options[option])
