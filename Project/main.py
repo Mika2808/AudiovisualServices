@@ -14,9 +14,11 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
         
         self.current_frame = None
+        self.show_main_frame()
+
+    def show_main_frame(self):
         self.show_frame(MainFrame)
-
-
+        
     def show_frame(self, frame):
         # delete current scene
         if self.current_frame is not None:
@@ -29,6 +31,8 @@ class App(customtkinter.CTk):
     def exit(self):
         print("Exiting") # info
         self.destroy() # destroying object
+    
+
         
 class MainFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
