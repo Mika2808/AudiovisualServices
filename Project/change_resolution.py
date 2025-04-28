@@ -3,7 +3,7 @@ import subprocess
 from tkinter import filedialog
 import os
 
-class ChangeContainerFrame(customtkinter.CTkFrame):
+class ChangeResolutionFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="#2b2b2b", **kwargs)
 
@@ -44,87 +44,38 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
         )
         self.file_label.grid(row=3, column=0, columnspan=6, padx=20, pady=10, sticky="new")
 
-        # Label choosing container
-        self.container_label = customtkinter.CTkLabel(
+        # Label choosing resolution
+        self.resolution_label = customtkinter.CTkLabel(
             self,
-            text="Container:",
+            text="Resolution:",
             text_color="white",
             fg_color="transparent",
             font=("Arial", 18)
         )
-        self.container_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
+        self.resolution_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
 
-        # Dictonary for containers
-        self.containers = {
-            "MP4 (Most popular, Streaming)": ".mp4",
-            "MKV (Flexible, Supports Everything)": ".mkv",
-            "AVI (Old, Big Files)": ".avi",
-            "MOV (Apple / QuickTime format)": ".mov",
-            "WebM (Web Optimized, Open Source)": ".webm",
-            "FLV (Flash Video, Older Web Videos)": ".flv"
+        # Dictonary for resolutions
+        self.resolutions = {
+            "Original (no change)": "scale=iw:ih",
+            "Full HD (1920x1080)": "scale=1920:1080",
+            "HD (1280x720)": "scale=1280:720",
+            "SD (640x480)": "scale=640:480",
+            "480p (854x480)": "scale=854:480",
+            "360p (640x360)": "scale=640:360",
+            "240p (426x240)": "scale=426:240",
+            "Fit width 1280 (keep aspect)": "scale=1280:-1",
+            "Fit height 720 (keep aspect)": "scale=-1:720",
+            "Fit width 640 (keep aspect)": "scale=640:-1",
+            "Fit height 480 (keep aspect)": "scale=-1:480"
         }
 
-        # Container options
-        self.container_option_menu = customtkinter.CTkOptionMenu(
+        # Resolution options
+        self.resolution_option_menu = customtkinter.CTkOptionMenu(
             self,
-            values=list(self.containers.keys()),
+            values=list(self.resolutions.keys()),
             #command=self.option_changed  # callback when selected
         )
-        self.container_option_menu.grid(row=4, column=3, padx=20, pady=10, sticky="w")
-
-        # Label choosing video codec
-        self.video_codec_label = customtkinter.CTkLabel(
-            self,
-            text="Video codec:",
-            text_color="white",
-            fg_color="transparent",
-            font=("Arial", 18)
-        )
-        self.video_codec_label.grid(row=5, column=0, columnspan=3, padx=20, pady=10, sticky="e")
-
-        # Dictionary with video codecs with values for FFMPEG        
-        self.video_codecs = {
-            "H.264 (High Quality / Compatibility)": "libx264",
-            "H.265 (Better Compression, 4K Ready)": "libx265",
-            "VP9 (Open Source, Web Optimized)": "libvpx-vp9",
-            "AV1 (Future Format, Ultra Compression)": "libaom-av1",
-            "MPEG-4 Part 2 (Old AVI videos)": "mpeg4"
-        }
-
-        # Video codec options
-        self.video_codec_option_menu = customtkinter.CTkOptionMenu(
-            self,
-            values=list(self.video_codecs.keys()),
-            #command=self.option_changed  # callback when selected
-        )
-        self.video_codec_option_menu.grid(row=5, column=3,columnspan=3, padx=20, pady=10, sticky="w")
-
-        # Label choosing audio codec
-        self.audio_codec_label = customtkinter.CTkLabel(
-            self,
-            text="Audio codec:",
-            text_color="white",
-            fg_color="transparent",
-            font=("Arial", 18)
-        )
-        self.audio_codec_label.grid(row=6, column=0,columnspan=3, padx=20, pady=10, sticky="e")
-
-        # Dictionary with audio codecs with values for FFMPEG   
-        self.audio_codecs = {
-            "AAC (Best for MP4 / Streaming)": "aac",
-            "MP3 (Classic, Wide Support)": "libmp3lame",
-            "Opus (Modern, Low Latency)": "libopus",
-            "FLAC (Lossless, Best Quality)": "flac",
-            "AC3 (Dolby Surround Sound)": "ac3"
-        }
-
-        # Audio codec options
-        self.audio_codec_option_menu = customtkinter.CTkOptionMenu(
-            self,
-            values=list(self.audio_codecs.keys()),
-            #command=self.option_changed  # callback when selected
-        )
-        self.audio_codec_option_menu.grid(row=6, column=3, columnspan=3, padx=20, pady=10, sticky="w")
+        self.resolution_option_menu.grid(row=4, column=3, padx=20, pady=10, sticky="w")
 
         # Preview button 
         self.preview_button = customtkinter.CTkButton(
@@ -183,7 +134,7 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
     
     def preview(self):
         if self.check_file() is True:       
-            output_preview = "preview" + self.containers[self.container_option_menu.get()]
+            output_preview = "preview.mov"
 
             # creating short version
             cmd = [
@@ -192,8 +143,7 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
                 "-ss", "00:00:40",
                 "-i", self.file_label.cget("text"),
                 "-t", "3",
-                "-c:v", self.video_codecs[self.video_codec_option_menu.get()], # getting chosen video codec
-                "-c:a", self.audio_codecs[self.audio_codec_option_menu.get()], # getting audio codec
+                "-vf", self.resolutions[self.resolution_option_menu.get()], # changing resoultion
                 output_preview
             ]
             subprocess.run(cmd, check=True)
@@ -221,15 +171,15 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
             #print(f"Directory selected: {directory_path}")
 
             if self.check_file() is True:       
-                output_preview = "FFMPEG_Graphical_Container" + self.containers[self.container_option_menu.get()]
+                filename, extension = os.path.splitext(self.file_label.cget("text"))
+                output_preview = "FFMPEG_Graphical_Resolution" + extension
 
                 # creating new file
                 cmd = [
                     "ffmpeg",
                     "-y",
                     "-i", self.file_label.cget("text"),
-                    "-c:v", self.video_codecs[self.video_codec_option_menu.get()], # getting chosen video codec
-                    "-c:a", self.audio_codecs[self.audio_codec_option_menu.get()], # getting audio codec
+                    "-vf", self.resolutions[self.resolution_option_menu.get()], # changing resolution
                     output_preview
                 ]
                 subprocess.run(cmd, check=True)
@@ -246,16 +196,7 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
             return False
         else:
             filename, extension = os.path.splitext(self.file_label.cget("text"))
-            if extension in self.containers.values():
+            if extension in [".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv"]:
                 return True
             else:
                 return False
-
-# Sometimes mix of codecs and continaers make ffmpeg fail to play. File is created but playing it in preview is impossible
-# Prefered table of containers with codecs
-# Container | Preferred Video Codecs            | Preferred Audio Codecs
-# .mp4      | H.264 (libx264), H.265 (libx265)  | AAC, MP3
-# .mkv      | H.264, H.265, VP9, AV1            | Opus, AAC, Vorbis
-# .avi      | MPEG-4 Part 2 (DivX, Xvid)        | MP3, PCM
-# .mov      | ProRes, H.264                     | PCM, AAC
-# .webm     | VP8, VP9, AV1                     | Vorbis, Opus

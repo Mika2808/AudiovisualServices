@@ -1,5 +1,6 @@
 import customtkinter
 from change_container import ChangeContainerFrame
+from change_resolution import ChangeResolutionFrame
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -29,7 +30,7 @@ class App(customtkinter.CTk):
         self.current_frame.grid(row=0, column=0, sticky="nsew")
     
     def exit(self):
-        print("Exiting") # info
+        #print("Exiting") # info
         self.destroy() # destroying object
     
 
@@ -52,7 +53,7 @@ class MainFrame(customtkinter.CTkFrame):
         self.start_frame.grid(row=0, column=0, padx=10, pady=(20, 10), sticky="nsew")
 
         self.options = {"Change container/codec" : ChangeContainerFrame, 
-                        "Change resolution" : None, 
+                        "Change resolution" : ChangeResolutionFrame, 
                         "Change CRF" : None, 
                         "Cut video" : None, 
                         "Extract audio" : None, 
@@ -85,7 +86,7 @@ class MainFrame(customtkinter.CTkFrame):
                 self.button.grid(row=i+2, column=0, padx=20, pady=15, sticky="ew", columnspan=2)
         
     def choose_option(self, option):
-        print("Button clicked:", option) # info about clicked button
+        #print("Button clicked:", option) # info about clicked button
         
         # changing frame or exiting
         if option == "Exit":
@@ -95,3 +96,36 @@ class MainFrame(customtkinter.CTkFrame):
 
 app = App()
 app.mainloop()
+
+
+
+
+## Dictionary for resolution
+# self.resolutions = {
+#     "Original (no change)": "scale=iw:ih",
+#     "Full HD (1920x1080)": "scale=1920:1080",
+#     "HD (1280x720)": "scale=1280:720",
+#     "SD (640x480)": "scale=640:480",
+#     "480p (854x480)": "scale=854:480",
+#     "360p (640x360)": "scale=640:360",
+#     "240p (426x240)": "scale=426:240",
+#     "Fit width 1280 (keep aspect)": "scale=1280:-1",
+#     "Fit height 720 (keep aspect)": "scale=-1:720",
+#     "Fit width 640 (keep aspect)": "scale=640:-1",
+#     "Fit height 480 (keep aspect)": "scale=-1:480"
+# }
+
+## CRF
+# self.resolutions = {
+#     "Original (no change)": "scale=iw:ih",
+#     "Full HD (1920x1080)": "scale=1920:1080",
+#     "HD (1280x720)": "scale=1280:720",
+#     "SD (640x480)": "scale=640:480",
+#     "480p (854x480)": "scale=854:480",
+#     "360p (640x360)": "scale=640:360",
+#     "240p (426x240)": "scale=426:240",
+#     "Fit width 1280 (keep aspect)": "scale=1280:-1",
+#     "Fit height 720 (keep aspect)": "scale=-1:720",
+#     "Fit width 640 (keep aspect)": "scale=640:-1",
+#     "Fit height 480 (keep aspect)": "scale=-1:480"
+# }
