@@ -2,6 +2,7 @@ import customtkinter
 from change_container import ChangeContainerFrame
 from change_resolution import ChangeResolutionFrame
 from change_crf import ChangeCRFFrame
+from cut_video import CutVideoFrame
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -56,7 +57,7 @@ class MainFrame(customtkinter.CTkFrame):
         self.options = {"Change container/codec" : ChangeContainerFrame, 
                         "Change resolution" : ChangeResolutionFrame, 
                         "Change CRF" : ChangeCRFFrame, 
-                        "Cut video" : None, 
+                        "Cut video" : CutVideoFrame, 
                         "Extract audio" : None, 
                         "Merge videos" : None, 
                         "Exit" : None
