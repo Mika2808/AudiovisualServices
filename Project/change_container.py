@@ -183,8 +183,8 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
             self.file_label.configure(text="No file selected")
     
     def preview(self):
-        if self.check_file() is True:
-            output_preview = "output.mov"
+        if self.check_file() is True:       
+            output_preview = "preview" + self.containers[self.container_option_menu.get()]
 
             # creating short version
             cmd = [
@@ -193,7 +193,8 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
                 "-ss", "00:00:40",
                 "-i", self.file_label.cget("text"),
                 "-t", "3",
-                "-c", "copy",
+                "-c:v", self.video_codecs[self.video_codec_option_menu.get()], # getting chosen video codec
+                "-c:a", self.audio_codecs[self.audio_codec_option_menu.get()], # getting audio codec
                 output_preview
             ]
             subprocess.run(cmd, check=True)
@@ -213,9 +214,35 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
 
     
     def do_the_thing(self):
-        print("lets go")
+        directory_path = filedialog.askdirectory(
+        title="Select a directory for new file",
+        initialdir="/home/mikab/Maribor/Studia/AUDIOVISUAL SERVICES/Project/Videos"
+        )
+        if directory_path:
+            print(f"Directory selected: {directory_path}")
+
+            if self.check_file() is True:       
+                output_preview = "FFMPEG_Graphical" + self.containers[self.container_option_menu.get()]
+
+                # creating new file
+                cmd = [
+                    "ffmpeg",
+                    "-y",
+                    "-i", self.file_label.cget("text"),
+                    "-c:v", self.video_codecs[self.video_codec_option_menu.get()], # getting chosen video codec
+                    "-c:a", self.audio_codecs[self.audio_codec_option_menu.get()], # getting audio codec
+                    output_preview
+                ]
+                subprocess.run(cmd, check=True)
+                         
+            else:
+                print("Preview not done because of wrong extension of chosen file!")
+        else:
+            print("Directory not selected")
+
     
     def check_file(self):
+        # checking if file has good extension
         if self.file_label.cget("text") == "No file selected":
             return False
         else:
@@ -224,3 +251,12 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
                 return True
             else:
                 return False
+
+# Sometimes mix of codecs and continaers make ffmpeg fail to play. File is created but playing it in preview is impossible
+# Prefered table of containers with codecs
+# Container | Preferred Video Codecs            | Preferred Audio Codecs
+# .mp4      | H.264 (libx264), H.265 (libx265)  | AAC, MP3
+# .mkv      | H.264, H.265, VP9, AV1            | Opus, AAC, Vorbis
+# .avi      | MPEG-4 Part 2 (DivX, Xvid)        | MP3, PCM
+# .mov      | ProRes, H.264                     | PCM, AAC
+# .webm     | VP8, VP9, AV1                     | Vorbis, Opus
