@@ -1,6 +1,7 @@
 import customtkinter
 from change_container import ChangeContainerFrame
 from change_resolution import ChangeResolutionFrame
+from change_crf import ChangeCRFFrame
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -54,7 +55,7 @@ class MainFrame(customtkinter.CTkFrame):
 
         self.options = {"Change container/codec" : ChangeContainerFrame, 
                         "Change resolution" : ChangeResolutionFrame, 
-                        "Change CRF" : None, 
+                        "Change CRF" : ChangeCRFFrame, 
                         "Cut video" : None, 
                         "Extract audio" : None, 
                         "Merge videos" : None, 
@@ -96,36 +97,3 @@ class MainFrame(customtkinter.CTkFrame):
 
 app = App()
 app.mainloop()
-
-
-
-
-## Dictionary for resolution
-# self.resolutions = {
-#     "Original (no change)": "scale=iw:ih",
-#     "Full HD (1920x1080)": "scale=1920:1080",
-#     "HD (1280x720)": "scale=1280:720",
-#     "SD (640x480)": "scale=640:480",
-#     "480p (854x480)": "scale=854:480",
-#     "360p (640x360)": "scale=640:360",
-#     "240p (426x240)": "scale=426:240",
-#     "Fit width 1280 (keep aspect)": "scale=1280:-1",
-#     "Fit height 720 (keep aspect)": "scale=-1:720",
-#     "Fit width 640 (keep aspect)": "scale=640:-1",
-#     "Fit height 480 (keep aspect)": "scale=-1:480"
-# }
-
-## CRF
-# self.resolutions = {
-#     "Original (no change)": "scale=iw:ih",
-#     "Full HD (1920x1080)": "scale=1920:1080",
-#     "HD (1280x720)": "scale=1280:720",
-#     "SD (640x480)": "scale=640:480",
-#     "480p (854x480)": "scale=854:480",
-#     "360p (640x360)": "scale=640:360",
-#     "240p (426x240)": "scale=426:240",
-#     "Fit width 1280 (keep aspect)": "scale=1280:-1",
-#     "Fit height 720 (keep aspect)": "scale=-1:720",
-#     "Fit width 640 (keep aspect)": "scale=640:-1",
-#     "Fit height 480 (keep aspect)": "scale=-1:480"
-# }

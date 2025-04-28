@@ -3,7 +3,7 @@ import subprocess
 from tkinter import filedialog
 import os
 
-class ChangeResolutionFrame(customtkinter.CTkFrame):
+class ChangeCRFFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="#2b2b2b", **kwargs)
 
@@ -13,7 +13,7 @@ class ChangeResolutionFrame(customtkinter.CTkFrame):
         # Title
         self.title_frame = customtkinter.CTkLabel(
             self,
-            text="Change resolution",
+            text="Change CRF - Constant Rate Factor",
             fg_color="#3a3a3a",
             text_color="white",
             corner_radius=12,
@@ -45,37 +45,34 @@ class ChangeResolutionFrame(customtkinter.CTkFrame):
         self.file_label.grid(row=3, column=0, columnspan=6, padx=20, pady=10, sticky="new")
 
         # Label choosing resolution
-        self.resolution_label = customtkinter.CTkLabel(
+        self.crf_label = customtkinter.CTkLabel(
             self,
-            text="Resolution:",
+            text="CRF:",
             text_color="white",
             fg_color="transparent",
             font=("Arial", 18)
         )
-        self.resolution_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
+        self.crf_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
 
         # Dictonary for resolutions
-        self.resolutions = {
-            "Original (no change)": "scale=iw:ih",
-            "Full HD (1920x1080)": "scale=1920:1080",
-            "HD (1280x720)": "scale=1280:720",
-            "SD (640x480)": "scale=640:480",
-            "480p (854x480)": "scale=854:480",
-            "360p (640x360)": "scale=640:360",
-            "240p (426x240)": "scale=426:240",
-            "Fit width 1280 (keep aspect)": "scale=1280:-1",
-            "Fit height 720 (keep aspect)": "scale=-1:720",
-            "Fit width 640 (keep aspect)": "scale=640:-1",
-            "Fit height 480 (keep aspect)": "scale=-1:480"
+        self.crfs = {
+            "Default (23)": "23",
+            "Very High Quality (18)": "18",
+            "High Quality (20)": "20",
+            "Good Quality (23)": "23",
+            "Balanced (25)": "25",
+            "Low Quality (28)": "28",
+            "Very Low Quality (50)": "50"
         }
 
+
         # Resolution options
-        self.resolution_option_menu = customtkinter.CTkOptionMenu(
+        self.crf_option_menu = customtkinter.CTkOptionMenu(
             self,
-            values=list(self.resolutions.keys()),
+            values=list(self.crfs.keys()),
             #command=self.option_changed  # callback when selected
         )
-        self.resolution_option_menu.grid(row=4, column=3, padx=20, pady=10, sticky="w")
+        self.crf_option_menu.grid(row=4, column=3, padx=20, pady=10, sticky="w")
 
         # Preview button 
         self.preview_button = customtkinter.CTkButton(
@@ -143,7 +140,7 @@ class ChangeResolutionFrame(customtkinter.CTkFrame):
                 "-ss", "00:00:40",
                 "-i", self.file_label.cget("text"),
                 "-t", "3",
-                "-vf", self.resolutions[self.resolution_option_menu.get()], # changing resoultion
+                "-crf", self.crfs[self.crf_option_menu.get()], # changing resoultion
                 output_preview
             ]
             subprocess.run(cmd, check=True)
@@ -172,14 +169,14 @@ class ChangeResolutionFrame(customtkinter.CTkFrame):
 
             if self.check_file() is True:       
                 filename, extension = os.path.splitext(self.file_label.cget("text"))
-                output_preview = "FFMPEG_Graphical_Resolution" + extension
+                output_preview = "FFMPEG_Graphical_CRF" + extension
 
                 # creating new file
                 cmd = [
                     "ffmpeg",
                     "-y",
                     "-i", self.file_label.cget("text"),
-                    "-vf", self.resolutions[self.resolution_option_menu.get()], # changing resolution
+                    "-crf", self.crfs[self.crf_option_menu.get()], # changing resolution
                     output_preview
                 ]
                 subprocess.run(cmd, check=True)
