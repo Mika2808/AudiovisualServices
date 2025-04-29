@@ -169,7 +169,7 @@ class ChangeCRFFrame(customtkinter.CTkFrame):
 
             if self.check_file() is True:       
                 filename, extension = os.path.splitext(self.file_label.cget("text"))
-                output_preview = "FFMPEG_Graphical_CRF" + extension
+                output_preview = directory_path + "/FFMPEG_Graphical_CRF" + extension
 
                 # creating new file
                 cmd = [

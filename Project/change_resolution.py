@@ -172,7 +172,7 @@ class ChangeResolutionFrame(customtkinter.CTkFrame):
 
             if self.check_file() is True:       
                 filename, extension = os.path.splitext(self.file_label.cget("text"))
-                output_preview = "FFMPEG_Graphical_Resolution" + extension
+                output_preview = directory_path + "/FFMPEG_Graphical_Resolution" + extension
 
                 # creating new file
                 cmd = [

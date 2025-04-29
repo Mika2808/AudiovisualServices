@@ -5,6 +5,7 @@ from change_crf import ChangeCRFFrame
 from cut_video import CutVideoFrame
 from extract_audio import ExtractAudioFrame
 from merge_videos import MergeVideosFrame
+from play import PlayFrame
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -56,7 +57,8 @@ class MainFrame(customtkinter.CTkFrame):
         )
         self.start_frame.grid(row=0, column=0, padx=10, pady=(20, 10), sticky="nsew")
 
-        self.options = {"Change container/codec" : ChangeContainerFrame, 
+        self.options = {"Play" : PlayFrame,
+                        "Change container/codec" : ChangeContainerFrame, 
                         "Change resolution" : ChangeResolutionFrame, 
                         "Change CRF" : ChangeCRFFrame, 
                         "Cut video" : CutVideoFrame, 

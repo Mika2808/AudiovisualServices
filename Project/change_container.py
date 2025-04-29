@@ -221,7 +221,7 @@ class ChangeContainerFrame(customtkinter.CTkFrame):
             #print(f"Directory selected: {directory_path}")
 
             if self.check_file() is True:       
-                output_preview = "FFMPEG_Graphical_Container" + self.containers[self.container_option_menu.get()]
+                output_preview = directory_path + "/FFMPEG_Graphical_Container" + self.containers[self.container_option_menu.get()]
 
                 # creating new file
                 cmd = [

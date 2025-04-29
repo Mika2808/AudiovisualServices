@@ -167,7 +167,7 @@ class CutVideoFrame(customtkinter.CTkFrame):
             if self.check_file() is True:       
                 if self.check_time(self.starting_point_entry.get(), self.ending_point_entry.get()) is True:
                     filename, extension = os.path.splitext(self.file_label.cget("text"))
-                    output_preview = "FFMPEG_Graphical_Cut_Video" + extension
+                    output_preview = directory_path + "/FFMPEG_Graphical_Cut_Video" + extension
 
                     # creating new file
                     cmd = [

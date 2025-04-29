@@ -167,7 +167,7 @@ class ExtractAudioFrame(customtkinter.CTkFrame):
 
             if self.check_file() is True:       
                 
-                output_preview = "FFMPEG_Graphical_Extracted_Audio" + self.audio_containers[self.audio_container_option_menu.get()]
+                output_preview = directory_path + "/FFMPEG_Graphical_Extracted_Audio" + self.audio_containers[self.audio_container_option_menu.get()]
 
                 cmd = [ "ffmpeg", 
                         "-i", self.file_label.cget("text"),
