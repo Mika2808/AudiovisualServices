@@ -3,7 +3,7 @@ import subprocess
 from tkinter import filedialog
 import os
 
-class CutVideoFrame(customtkinter.CTkFrame):
+class ExtractAudioFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, fg_color="#2b2b2b", **kwargs)
 
@@ -13,7 +13,7 @@ class CutVideoFrame(customtkinter.CTkFrame):
         # Title
         self.title_frame = customtkinter.CTkLabel(
             self,
-            text="Cut video",
+            text="Extract audio",
             fg_color="#3a3a3a",
             text_color="white",
             corner_radius=12,
@@ -44,33 +44,34 @@ class CutVideoFrame(customtkinter.CTkFrame):
         )
         self.file_label.grid(row=3, column=0, columnspan=6, padx=20, pady=10, sticky="new")
 
-        # Label for starting point of cutting
-        self.starting_point_label = customtkinter.CTkLabel(
+        # Label choosing resolution
+        self.audio_container_label = customtkinter.CTkLabel(
             self,
-            text="Starting point:",
+            text="Audio container:",
             text_color="white",
             fg_color="transparent",
             font=("Arial", 18)
         )
-        self.starting_point_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
-        
-        # Starting point Entry
-        self.starting_point_entry = customtkinter.CTkEntry(master=self, corner_radius=0, placeholder_text="00:00:00")
-        self.starting_point_entry.grid(row=4, column=3, padx=20, pady=10, sticky="w")
+        self.audio_container_label.grid(row=4, column=0, columnspan=3, padx=20, pady=10, sticky="e")
 
-        # Label ending point of cutting
-        self.ending_point_label = customtkinter.CTkLabel(
+        # Dictonary for audio containers
+        self.audio_containers = {
+            "MP3 (MPEG Layer III)": ".mp3",
+            "AAC (Advanced Audio Coding)": ".aac",
+            "WAV (Uncompressed)": ".wav",
+            "OGG (Vorbis)": ".ogg",
+            "FLAC (Lossless)": ".flac",
+            "Opus (Web-friendly)": ".opus",
+            "M4A (MPEG-4 Audio)": ".m4a",
+        }
+
+        # Audio containers options
+        self.audio_container_option_menu = customtkinter.CTkOptionMenu(
             self,
-            text="Ending point:",
-            text_color="white",
-            fg_color="transparent",
-            font=("Arial", 18)
+            values=list(self.audio_containers.keys()),
+            #command=self.option_changed  # callback when selected
         )
-        self.ending_point_label.grid(row=5, column=0, columnspan=3, padx=20, pady=10, sticky="e")
-        
-        # Ending point Entry
-        self.ending_point_entry = customtkinter.CTkEntry(master=self, corner_radius=0, placeholder_text="00:00:00")
-        self.ending_point_entry.grid(row=5, column=3,columnspan=3, padx=20, pady=10, sticky="w")
+        self.audio_container_option_menu.grid(row=4, column=3, padx=20, pady=10, sticky="w")
 
         # Preview button 
         self.preview_button = customtkinter.CTkButton(
@@ -129,28 +130,28 @@ class CutVideoFrame(customtkinter.CTkFrame):
     
     def preview(self):
         if self.check_file() is True:       
-            output_preview = "preview.mov"
+            output_preview = "preview" + self.audio_containers[self.audio_container_option_menu.get()]
 
             # creating short version
-            cmd = [
-                "ffmpeg",
-                "-y",
-                "-ss", "00:00:40",
-                "-i", self.file_label.cget("text"),
-                "-t", str(self.count_time(self.starting_point_entry.get(), self.ending_point_entry.get())), 
-                output_preview
-            ]
+            cmd = [ "ffmpeg",
+                    "-ss", "00:00:40",
+                    "-t", "3",
+                    "-i", self.file_label.cget("text"),
+                    "-q:a", "0", # highest quality
+                    "-map", "a", # map only aduio stream
+                    output_preview]
+            
             subprocess.run(cmd, check=True)
             
             # playing short version
             cmd = ["ffplay", output_preview]
             subprocess.run(cmd, check=True)
 
-            # # deleting short version
-            # if os.path.exists(output_preview):
-            #     os.remove(output_preview)
-            # else:
-            #     print(f"Preview file {output_preview} not found!")
+            # deleting short version
+            if os.path.exists(output_preview):
+                os.remove(output_preview)
+            else:
+                print(f"Preview file {output_preview} not found!")
                 
         else:
             print("Preview not done because of wrong extension of chosen file!")
@@ -165,30 +166,24 @@ class CutVideoFrame(customtkinter.CTkFrame):
             #print(f"Directory selected: {directory_path}")
 
             if self.check_file() is True:       
-                if self.check_time(self.starting_point_entry.get(), self.ending_point_entry.get()) is True:
-                    filename, extension = os.path.splitext(self.file_label.cget("text"))
-                    output_preview = "FFMPEG_Graphical_Cut_Video" + extension
+                
+                output_preview = "FFMPEG_Graphical_Extracted_Audio" + self.audio_containers[self.audio_container_option_menu.get()]
 
-                    # creating new file
-                    cmd = [
-                        "ffmpeg",
-                        "-y",
-                        "-ss", self.starting_point_entry.get(),
+                cmd = [ "ffmpeg", 
                         "-i", self.file_label.cget("text"),
-                        "-t", str(self.count_time(self.starting_point_entry.get(), self.ending_point_entry.get())),
-                        output_preview
-                    ]
-                    subprocess.run(cmd, check=True)
-                else:
-                    print("Wrong format of time. Please try again")                     
+                        "-q:a", "0", # highest quality
+                        "-map", "a", # map only aduio stream
+                        output_preview]
+                subprocess.run(cmd, check=True)
+                         
             else:
-                print("Preview not done because of wrong extension of chosen file!")
+                print("Do the thing not done because of wrong extension of chosen file!")
         else:
             print("Directory not selected")
 
     
     def check_file(self):
-        # checking if file has good container
+        # checking if file has good extension
         if self.file_label.cget("text") == "No file selected":
             return False
         else:
@@ -197,15 +192,3 @@ class CutVideoFrame(customtkinter.CTkFrame):
                 return True
             else:
                 return False
-    
-    def check_time(self, starting_point, ending_point):
-        # checking for correct format of time
-        return "00:00:00" <= starting_point <= ending_point <= "99:59:59"
-        
-    def count_time(self, starting_point, ending_point):
-
-        seconds_string = int(ending_point[6:8]) - int(starting_point[6:8])
-        minutes_string = int(ending_point[3:5]) - int(starting_point[3:5])
-        hours_string = int(ending_point[0:2]) - int(starting_point[0:2])
-
-        return seconds_string + minutes_string*60 + hours_string*60*60

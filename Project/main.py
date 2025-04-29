@@ -3,6 +3,8 @@ from change_container import ChangeContainerFrame
 from change_resolution import ChangeResolutionFrame
 from change_crf import ChangeCRFFrame
 from cut_video import CutVideoFrame
+from extract_audio import ExtractAudioFrame
+from merge_videos import MergeVideosFrame
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -58,8 +60,8 @@ class MainFrame(customtkinter.CTkFrame):
                         "Change resolution" : ChangeResolutionFrame, 
                         "Change CRF" : ChangeCRFFrame, 
                         "Cut video" : CutVideoFrame, 
-                        "Extract audio" : None, 
-                        "Merge videos" : None, 
+                        "Extract audio" : ExtractAudioFrame, 
+                        "Merge videos" : MergeVideosFrame, 
                         "Exit" : None
                         }
 
