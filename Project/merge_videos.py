@@ -5,7 +5,7 @@ import os
 
 class MergeVideosFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+        super().__init__(master, fg_color="#2b2b2b", **kwargs)
 
         self.grid_columnconfigure((0,2,3), weight=1)
         self.grid_rowconfigure(0, weight=1)

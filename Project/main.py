@@ -12,7 +12,7 @@ class App(customtkinter.CTk):
         super().__init__()
         
         # main parameters
-        self.title("Name Surname")
+        self.title("Mikołaj Kabała")
         self.geometry("1000x800")
         customtkinter.set_widget_scaling(1.3)  # widget dimensions and text size
         
@@ -49,7 +49,7 @@ class MainFrame(customtkinter.CTkFrame):
         
         self.start_frame = customtkinter.CTkLabel(
             self,
-            text="🎬 Welcome to the FFMPEG GUI",
+            text="Welcome to the FFMPEG GUI",
             fg_color="#3a3a3a",
             text_color="white",
             corner_radius=12,

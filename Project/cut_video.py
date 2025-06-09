@@ -135,7 +135,7 @@ class CutVideoFrame(customtkinter.CTkFrame):
             cmd = [
                 "ffmpeg",
                 "-y",
-                "-ss", "00:00:40",
+                "-ss", self.starting_point_entry.get(),
                 "-i", self.file_label.cget("text"),
                 "-t", str(self.count_time(self.starting_point_entry.get(), self.ending_point_entry.get())), 
                 output_preview
@@ -146,11 +146,11 @@ class CutVideoFrame(customtkinter.CTkFrame):
             cmd = ["ffplay", output_preview]
             subprocess.run(cmd, check=True)
 
-            # # deleting short version
-            # if os.path.exists(output_preview):
-            #     os.remove(output_preview)
-            # else:
-            #     print(f"Preview file {output_preview} not found!")
+            # deleting short version
+            if os.path.exists(output_preview):
+                os.remove(output_preview)
+            else:
+                print(f"Preview file {output_preview} not found!")
                 
         else:
             print("Preview not done because of wrong extension of chosen file!")
