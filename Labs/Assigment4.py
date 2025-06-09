@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.io.wavfile import write
 from scipy import signal
+import matplotlib.pyplot as plt
 
 #------------------------------ 1 ---------------------------------
 # Parameters
@@ -20,11 +21,11 @@ stereo = np.stack((left, right), axis=-1)
 # Save as int16
 write("stereo_int16.wav", fs, (stereo * 32767).astype(np.int16))
 
-
-#------------------------------ 2 ---------------------------------
 # Save as uint8 (range [0, 255])
 stereo_uint8 = ((stereo + 1) / 2 * 255).astype(np.uint8)
 write("stereo_uint8.wav", fs, stereo_uint8)
+
+#------------------------------ 1b ---------------------------------
 
 def calculate_audio_info(fs, duration, channels, bit_depth):
     bytes_per_sample = bit_depth // 8
@@ -36,11 +37,11 @@ def calculate_audio_info(fs, duration, channels, bit_depth):
 size_int16, bitrate_int16 = calculate_audio_info(44100, 5, 2, 16)
 size_uint8, bitrate_uint8 = calculate_audio_info(44100, 5, 2, 8)
 
-print(f"INT16: File size = {size_int16/1024:.2f} KB, Bitrate = {bitrate_int16} bps")
+print(f"\nINT16: File size = {size_int16/1024:.2f} KB, Bitrate = {bitrate_int16} bps")
 print(f"UINT8: File size = {size_uint8/1024:.2f} KB, Bitrate = {bitrate_uint8} bps")
 
 
-#------------------------------ 3 ---------------------------------
+#------------------------------ 2 ---------------------------------
 def generate_melody(waveform_type, freqs, durations, fs=44100):
     melody = np.array([], dtype=np.float32)
     for f, d in zip(freqs, durations):
@@ -64,3 +65,31 @@ melody = generate_melody('triangular', frequencies, durations)
 # Save as WAV
 write("melody.wav", 44100, (melody * 32767).astype(np.int16))
 
+
+#------------------------------ 3 ---------------------------------
+# Generate waveforms
+duration = 1
+t = np.linspace(0, duration, fs, endpoint=False)
+
+waveforms = {
+    "Square": signal.square(2 * np.pi * 440 * t),
+    "Sawtooth": signal.sawtooth(2 * np.pi * 440 * t),
+    "Triangular": signal.sawtooth(2 * np.pi * 440 * t, width=0.5)
+}
+
+# Plot FFTs
+plt.figure(figsize=(12, 8))
+for i, (name, wave) in enumerate(waveforms.items()):
+    fft_vals = np.fft.fft(wave)
+    fft_freq = np.fft.fftfreq(len(fft_vals), 1/fs)
+    magnitude = np.abs(fft_vals[:fs//2])
+
+    plt.subplot(3, 1, i+1)
+    plt.plot(fft_freq[:fs//2], magnitude)
+    plt.title(f"{name} Wave FFT")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+plt.tight_layout()
+plt.show()
