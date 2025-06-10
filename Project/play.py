@@ -102,7 +102,7 @@ class PlayFrame(customtkinter.CTkFrame):
             return False
         else:
             filename, extension = os.path.splitext(self.file_label.cget("text"))
-            if extension in [".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv"]:
+            if extension in [".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv", ".mp3"]:
                 return True
             else:
                 return False
